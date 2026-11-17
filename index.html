@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi primer juego</title>
+<style>
+  body { margin: 0; background: #111; display: flex; justify-content: center; align-items: center; height: 100vh; }
+  canvas { background: #222; border: 2px solid #555; }
+</style>
+</head>
+<body>
+<canvas id="c" width="600" height="400"></canvas>
+<script>
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d');
+  const player = { x: 280, y: 180, size: 40, speed: 4 };
+  const keys = {};
+
+  addEventListener('keydown', e => {
+    if (e.key.startsWith('Arrow')) e.preventDefault();
+    keys[e.key] = true;
+  });
+  addEventListener('keyup', e => keys[e.key] = false);
+
+  function loop() {
+    if (keys.ArrowLeft)  player.x -= player.speed;
+    if (keys.ArrowRight) player.x += player.speed;
+    if (keys.ArrowUp)    player.y -= player.speed;
+    if (keys.ArrowDown)  player.y += player.speed;
+
+    player.x = Math.max(0, Math.min(canvas.width - player.size, player.x));
+    player.y = Math.max(0, Math.min(canvas.height - player.size, player.y));
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = 'red';
+    ctx.fillRect(player.x, player.y, player.size, player.size);
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>
